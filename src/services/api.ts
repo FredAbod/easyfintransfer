@@ -130,3 +130,9 @@ export const depositFunds = async (data: DepositRequest): Promise<AuthResponse> 
     throw new Error('Network error occurred');
   }
 };
+
+// Export individual functions for the unused components to resolve build errors
+export const loginUser = authApi.signin;
+export const signupUser = authApi.signup;
+export const addPhoneNumber = authApi.addPhoneNumber;
+export const addUsername = authApi.addUsername;
