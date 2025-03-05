@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -12,7 +13,8 @@ import CompleteProfile from '@/pages/CompleteProfile';
 import NotFound from "./pages/NotFound";
 import Dashboard from "./components/dashboard/Dashboard";
 import TransferForm from "./components/transfers/TransferForm";
-// No need for ProtectedRoute anymore, but keeping it with its new implementation for compatibility
+import Profile from "./pages/Profile";
+import Deposit from "./pages/Deposit";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,8 @@ const App: React.FC = () => (
             {/* No more protected routes wrapping - access directly */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/transfer" element={<TransferForm />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/deposit" element={<Deposit />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>

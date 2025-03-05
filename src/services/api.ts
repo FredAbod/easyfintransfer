@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 
 const API_BASE_URL = 'https://miniopay.onrender.com';
@@ -19,6 +20,11 @@ export interface AddPhoneRequest {
 
 export interface AddUsernameRequest {
   userName: string;
+}
+
+export interface DepositRequest {
+  email: string;
+  amount: number;
 }
 
 // Updated to match actual API response structure
@@ -106,5 +112,21 @@ export const authApi = {
       }
       throw new Error('Network error occurred');
     }
+  }
+};
+
+// New deposit API service
+export const depositFunds = async (data: DepositRequest): Promise<AuthResponse> => {
+  try {
+    console.log(`Calling Deposit API with:`, data);
+    const response = await axios.post<AuthResponse>(`${API_BASE_URL}/api/v1/user/deposit`, data);
+    console.log("Deposit API response:", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("Deposit API error:", error.response?.data || error.message);
+    if (error.response) {
+      return error.response.data;
+    }
+    throw new Error('Network error occurred');
   }
 };
