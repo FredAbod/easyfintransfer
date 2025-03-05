@@ -9,6 +9,7 @@ import AnimatedButton from '@/components/ui/AnimatedButton';
 import NavBar from '@/components/shared/NavBar';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 
 const transactions = [
   { id: 1, type: 'incoming' as const, amount: 1250.00, description: 'Salary Deposit', date: 'Today, 10:45 AM' },
@@ -21,6 +22,7 @@ const transactions = [
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+  const [phoneNumber, setPhoneNumber] = useState('');
   const { user, fetchProfile } = useAuth();
   const { toast } = useToast();
   
@@ -49,7 +51,41 @@ const Dashboard = () => {
   
   // Default profile image URL
   const defaultProfileImage = 'https://res.cloudinary.com/grazac/image/upload/v1719308203/lol_k_gprc9r.jpg';
-  
+
+  // Flutterwave payment configuration
+  const config = {
+    public_key: 'FLWPUBK_TEST-8fd128bcb46353c3129ff772b4ad440f-X',
+    tx_ref: Date.now().toString(),
+    amount: 100, // Set the amount dynamically as needed
+    currency: 'NGN',
+    payment_options: 'card,mobilemoney,ussd',
+    customer: {
+      email: user?.email,
+      phone_number: phoneNumber,
+      name: displayName,
+    },
+    customizations: {
+      title: 'Deposit Funds',
+      description: 'Payment for deposit',
+      logo: 'https://your-logo-url.com/logo.png',
+    },
+  };
+
+  const handleFlutterwavePayment = useFlutterwave(config);
+
+  const handleDepositClick = () => {
+    handleFlutterwavePayment({
+      callback: (response) => {
+        console.log(response);
+        closePaymentModal(); // Close the modal programmatically
+        // Handle successful payment here
+      },
+      onClose: () => {
+        // Handle modal close event
+      },
+    });
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 pb-20 md:pl-64">
       <NavBar />

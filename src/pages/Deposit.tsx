@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import NavBar from '@/components/shared/NavBar';
 import { useAuth } from '@/contexts/AuthContext';
 import { AtSign, DollarSign, CreditCard, Wallet, ArrowRight } from 'lucide-react';
-import { depositFunds } from '@/services/api';
+import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
 
 const Deposit = () => {
   const navigate = useNavigate();
@@ -17,6 +16,7 @@ const Deposit = () => {
   const { user } = useAuth();
   const [email, setEmail] = useState(user?.email || '');
   const [amount, setAmount] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDeposit = async (e: React.FormEvent) => {
@@ -39,38 +39,59 @@ const Deposit = () => {
       });
       return;
     }
+
+    if (!phoneNumber.trim()) {
+      toast({
+        title: "Phone Number Required",
+        description: "Please enter your phone number.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsLoading(true);
     
-    try {
-      const response = await depositFunds({ email, amount: Number(amount) });
-      
-      if (response.status === 'success') {
-        toast({
-          title: "Deposit Successful!",
-          description: `$${amount} has been added to your account.`,
-          variant: "default",
-        });
-        
-        setTimeout(() => {
-          navigate('/dashboard');
-        }, 1500);
-      } else {
-        toast({
-          title: "Deposit Failed",
-          description: response.message || "There was an error processing your deposit.",
-          variant: "destructive",
-        });
-      }
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "An unexpected error occurred.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    const config = {
+      public_key: 'FLWPUBK_TEST-8fd128bcb46353c3129ff772b4ad440f-X',
+      tx_ref: Date.now().toString(),
+      amount: Number(amount),
+      currency: 'NGN',
+      payment_options: 'card,mobilemoney,ussd',
+      customer: {
+        email: email,
+        phone_number: phoneNumber,
+        name: user?.userName || email,
+      },
+      customizations: {
+        title: 'Deposit Funds',
+        description: 'Payment for deposit',
+        logo: 'https://your-logo-url.com/logo.png',
+      },
+    };
+
+    const handleFlutterwavePayment = useFlutterwave(config);
+
+    handleFlutterwavePayment({
+      callback: (response) => {
+        console.log(response);
+        closePaymentModal();
+        if (response.status === 'successful') {
+          toast({
+            title: "Deposit Successful!",
+            description: `$${amount} has been added to your account.`,
+            variant: "default",
+          });
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 1500);
+        }
+      },
+      onClose: () => {
+        // Handle modal close event
+      },
+    });
+
+    setIsLoading(false);
   };
 
   return (
@@ -88,7 +109,7 @@ const Deposit = () => {
             <CardHeader>
               <CardTitle>Make a Deposit</CardTitle>
               <CardDescription>
-                Enter your email and the amount you'd like to deposit
+                Enter your email, phone number, and the amount you'd like to deposit
               </CardDescription>
             </CardHeader>
             
@@ -107,6 +128,24 @@ const Deposit = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       className="pl-10"
                       placeholder="your.email@example.com"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phoneNumber">Phone Number</Label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <AtSign className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <Input
+                      id="phoneNumber"
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      className="pl-10"
+                      placeholder="Enter your phone number"
                       required
                     />
                   </div>
