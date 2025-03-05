@@ -1,4 +1,3 @@
-
 import { apiClient, handleApiError } from './apiUtils';
 import { 
   SignupRequest, 
@@ -7,6 +6,7 @@ import {
   AddUsernameRequest, 
   AuthResponse 
 } from './types/authTypes';
+import { TransactionsResponse } from './types/transactionTypes';
 
 // Core auth API functions
 export const authApi = {
@@ -37,8 +37,8 @@ export const authApi = {
   // Add phone number
   addPhoneNumber: async (userId: string, data: AddPhoneRequest): Promise<AuthResponse> => {
     try {
-      console.log(`Calling API: PUT /api/v1/user/add/${userId}`, data);
-      const response = await apiClient.put<AuthResponse>(`/api/v1/user/add/${userId}`, data);
+      console.log(`Calling API: PUT /api/v1/user/phone/${userId}`, data);
+      const response = await apiClient.put<AuthResponse>(`/api/v1/user/phone/${userId}`, data);
       console.log("Phone Number API response:", response.data);
       return response.data;
     } catch (error: any) {
@@ -49,14 +49,28 @@ export const authApi = {
   // Add username
   addUsername: async (userId: string, data: AddUsernameRequest): Promise<AuthResponse> => {
     try {
-      console.log(`Calling API: PUT /api/v1/user/addUsername/${userId}`, data);
-      const response = await apiClient.put<AuthResponse>(`/api/v1/user/addUsername/${userId}`, data);
+      console.log(`Calling API: PUT /api/v1/user/username/${userId}`, data);
+      const response = await apiClient.put<AuthResponse>(`/api/v1/user/username/${userId}`, data);
       console.log("Username API response:", response.data);
       return response.data;
     } catch (error: any) {
       return handleApiError(error, 'Failed to add username');
     }
-  }
+  },
+
+  // Fetch user transactions
+  getUserTransactions: async (userId: string, page: number = 1, limit: number = 10): Promise<TransactionsResponse> => {
+    try {
+      console.log(`Fetching transactions for user ID: ${userId}`);
+      const response = await apiClient.get<TransactionsResponse>(`/api/v1/trx/user/${userId}`, {
+        params: { page, limit },
+      });
+      console.log("Transactions API response:", response.data);
+      return response.data;
+    } catch (error: any) {
+      return handleApiError(error, 'Failed to fetch transactions');
+    }
+  },
 };
 
 // Compatibility layers for unused components

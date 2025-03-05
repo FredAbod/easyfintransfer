@@ -78,7 +78,7 @@ const Deposit = () => {
         if (response.status === 'successful') {
           toast({
             title: "Deposit Successful!",
-            description: `$${amount} has been added to your account.`,
+            description: `₦${amount} has been added to your account.`,
             variant: "default",
           });
           setTimeout(() => {
@@ -169,7 +169,7 @@ const Deposit = () => {
                       required
                     />
                   </div>
-                  <p className="text-sm text-slate-500">Minimum deposit amount: $0.01</p>
+                  <p className="text-sm text-slate-500">Minimum deposit amount: ₦0.01</p>
                 </div>
                 
                 <Button 

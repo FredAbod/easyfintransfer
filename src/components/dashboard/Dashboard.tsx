@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PlusCircle, EyeOff, Eye, TrendingUp, CreditCard, ChevronRight, ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,22 +9,37 @@ import AnimatedButton from '@/components/ui/AnimatedButton';
 import NavBar from '@/components/shared/NavBar';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
-
-const transactions = [
-  { id: 1, type: 'incoming' as const, amount: 1250.00, description: 'Salary Deposit', date: 'Today, 10:45 AM' },
-  { id: 2, type: 'outgoing' as const, amount: 85.25, description: 'Grocery Store', date: 'Yesterday, 2:30 PM' },
-  { id: 3, type: 'outgoing' as const, amount: 42.50, description: 'Coffee Shop', date: 'Mar 12, 9:15 AM' },
-  { id: 4, type: 'incoming' as const, amount: 500.00, description: 'Refund', date: 'Mar 10, 5:20 PM' },
-  { id: 5, type: 'outgoing' as const, amount: 125.00, description: 'Internet Bill', date: 'Mar 8, 11:30 AM' },
-];
+import { apiClient } from '@/services/apiUtils'; // Import the apiClient
+import { TransactionsResponse } from '@/services/types/transactionTypes'; // Import the types
+import { authApi } from '@/services/authService'; // Import the authApi
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [transactions, setTransactions] = useState([]);
   const { user, fetchProfile } = useAuth();
   const { toast } = useToast();
+  
+  useEffect(() => {
+    // Dummy data for testing
+    const dummyTransactions = [
+      {
+        _id: '1',
+        transactionType: 'deposit',
+        amount: { $numberDecimal: '2000' },
+        description: 'Salary Payment',
+        createdAt: '2023-10-01T10:00:00Z',
+      },
+      {
+        _id: '2',
+        transactionType: 'withdrawal',
+        amount: { $numberDecimal: '500' },
+        description: 'Grocery Shopping',
+        createdAt: '2023-10-02T12:00:00Z',
+      },
+    ];
+    setTransactions(dummyTransactions);
+  }, []);
   
   // Fetch the latest user data when the dashboard loads
   useEffect(() => {
@@ -43,6 +58,34 @@ const Dashboard = () => {
     getProfileData();
   }, []);
   
+  // Fetch transaction history
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        if (!user?._id) {
+          throw new Error("User ID is not available");
+        }
+        const transactionsData = await authApi.getUserTransactions(user._id, 1, 10);
+        if (transactionsData && transactionsData.data && transactionsData.data.transactions) {
+          console.log("Setting transactions:", transactionsData.data.transactions);
+          setTransactions(transactionsData.data.transactions);
+        } else {
+          throw new Error("Invalid response structure");
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to load transactions.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    if (user?._id) {
+      fetchTransactions();
+    }
+  }, [user?._id]);
+
   const displayName = user?.userName || user?.email?.split('@')[0] || 'User';
   
   const accountBalance = user?.accountBalance?.$numberDecimal 
@@ -51,40 +94,6 @@ const Dashboard = () => {
   
   // Default profile image URL
   const defaultProfileImage = 'https://res.cloudinary.com/grazac/image/upload/v1719308203/lol_k_gprc9r.jpg';
-
-  // Flutterwave payment configuration
-  const config = {
-    public_key: 'FLWPUBK_TEST-8fd128bcb46353c3129ff772b4ad440f-X',
-    tx_ref: Date.now().toString(),
-    amount: 100, // Set the amount dynamically as needed
-    currency: 'NGN',
-    payment_options: 'card,mobilemoney,ussd',
-    customer: {
-      email: user?.email,
-      phone_number: phoneNumber,
-      name: displayName,
-    },
-    customizations: {
-      title: 'Deposit Funds',
-      description: 'Payment for deposit',
-      logo: 'https://your-logo-url.com/logo.png',
-    },
-  };
-
-  const handleFlutterwavePayment = useFlutterwave(config);
-
-  const handleDepositClick = () => {
-    handleFlutterwavePayment({
-      callback: (response) => {
-        console.log(response);
-        closePaymentModal(); // Close the modal programmatically
-        // Handle successful payment here
-      },
-      onClose: () => {
-        // Handle modal close event
-      },
-    });
-  };
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20 md:pl-64">
@@ -111,7 +120,7 @@ const Dashboard = () => {
                 <p className="text-sm text-slate-500">Total Balance</p>
                 <div className="flex items-center gap-2">
                   {isBalanceVisible ? (
-                    <h3 className="text-3xl font-semibold">${accountBalance}</h3>
+                    <h3 className="text-3xl font-semibold">₦{accountBalance}</h3>
                   ) : (
                     <h3 className="text-3xl font-semibold">••••••</h3>
                   )}
@@ -156,7 +165,7 @@ const Dashboard = () => {
                   <TrendingUp className="h-5 w-5 text-fintech-blue" />
                   <p className="text-sm font-medium">Income</p>
                 </div>
-                <p className="text-xl font-semibold">$1,750.00</p>
+                <p className="text-xl font-semibold">₦****</p>
                 <p className="text-xs text-slate-500 mt-1">Last 30 days</p>
               </div>
               
@@ -165,7 +174,7 @@ const Dashboard = () => {
                   <CreditCard className="h-5 w-5 text-fintech-blue" />
                   <p className="text-sm font-medium">Expenses</p>
                 </div>
-                <p className="text-xl font-semibold">$425.50</p>
+                <p className="text-xl font-semibold">₦***</p>
                 <p className="text-xs text-slate-500 mt-1">Last 30 days</p>
               </div>
             </div>
@@ -183,53 +192,26 @@ const Dashboard = () => {
           </CardHeader>
           
           <CardContent className="p-6">
-            <Tabs defaultValue="all">
-              <TabsList className="mb-4">
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="income">Income</TabsTrigger>
-                <TabsTrigger value="expense">Expense</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="all" className="space-y-1 animate-slide-up">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
                 {transactions.map((transaction) => (
-                  <TransactionItem
-                    key={transaction.id}
-                    type={transaction.type}
-                    amount={transaction.amount}
-                    description={transaction.description}
-                    date={transaction.date}
-                  />
+                  <tr key={transaction._id}>
+                    <td className="px-6 py-4 whitespace-nowrap">{transaction.description}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">₦{transaction.amount.$numberDecimal}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{transaction.transactionType}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{new Date(transaction.createdAt).toLocaleString()}</td>
+                  </tr>
                 ))}
-              </TabsContent>
-              
-              <TabsContent value="income" className="space-y-1 animate-slide-up">
-                {transactions
-                  .filter((transaction) => transaction.type === 'incoming')
-                  .map((transaction) => (
-                    <TransactionItem
-                      key={transaction.id}
-                      type={transaction.type}
-                      amount={transaction.amount}
-                      description={transaction.description}
-                      date={transaction.date}
-                    />
-                  ))}
-              </TabsContent>
-              
-              <TabsContent value="expense" className="space-y-1 animate-slide-up">
-                {transactions
-                  .filter((transaction) => transaction.type === 'outgoing')
-                  .map((transaction) => (
-                    <TransactionItem
-                      key={transaction.id}
-                      type={transaction.type}
-                      amount={transaction.amount}
-                      description={transaction.description}
-                      date={transaction.date}
-                    />
-                  ))}
-              </TabsContent>
-            </Tabs>
+              </tbody>
+            </table>
           </CardContent>
         </Card>
       </main>

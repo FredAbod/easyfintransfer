@@ -1,18 +1,18 @@
-
 import React from 'react';
 import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TransactionItemProps {
-  type: 'incoming' | 'outgoing';
-  amount: number;
+  type: 'deposit' | 'withdrawal' | 'transfer';
+  amount: string;
   description: string;
   date: string;
   className?: string;
 }
 
 const TransactionItem = ({ type, amount, description, date, className }: TransactionItemProps) => {
-  const isIncoming = type === 'incoming';
+  console.log("Rendering TransactionItem:", { type, amount, description, date });
+  const isIncoming = type === 'deposit';
   
   return (
     <div className={cn(
@@ -32,14 +32,14 @@ const TransactionItem = ({ type, amount, description, date, className }: Transac
       
       <div className="flex-1 min-w-0">
         <p className="font-medium text-slate-900 truncate">{description}</p>
-        <p className="text-sm text-slate-500">{date}</p>
+        <p className="text-sm text-slate-500">{new Date(date).toLocaleString()}</p>
       </div>
       
       <div className={cn(
         "font-medium",
         isIncoming ? "text-green-600" : "text-red-600"
       )}>
-        {isIncoming ? '+' : '-'}${amount.toFixed(2)}
+        {isIncoming ? '+' : '-'}₦{parseFloat(amount).toFixed(2)}
       </div>
     </div>
   );

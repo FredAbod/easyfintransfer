@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -72,7 +71,7 @@ const TransferForm = () => {
         if (success) {
           toast({
             title: "Transfer successful!",
-            description: `$${formData.amount} has been transferred successfully.`,
+            description: `₦${formData.amount} has been transferred successfully.`,
           });
         } else {
           toast({
@@ -154,7 +153,7 @@ const TransferForm = () => {
                   <div className="space-y-2">
                     <Label htmlFor="amount">Amount</Label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">₦</span>
                       <Input
                         id="amount"
                         name="amount"
@@ -177,8 +176,8 @@ const TransferForm = () => {
                         <SelectValue placeholder="Select account" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="main">Main Account ($8,250.50)</SelectItem>
-                        <SelectItem value="business">Business Account ($3,120.25)</SelectItem>
+                        <SelectItem value="main">Main Account (₦8,250.50)</SelectItem>
+                        <SelectItem value="business">Business Account (₦3,120.25)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -193,8 +192,8 @@ const TransferForm = () => {
                         <SelectValue placeholder="Select account" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="savings">Savings Account ($2,430.15)</SelectItem>
-                        <SelectItem value="investment">Investment Account ($5,670.80)</SelectItem>
+                        <SelectItem value="savings">Savings Account (₦2,430.15)</SelectItem>
+                        <SelectItem value="investment">Investment Account (₦5,670.80)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -229,7 +228,7 @@ const TransferForm = () => {
               <CardContent className="p-6 pt-6">
                 <div className="space-y-6">
                   <div className="rounded-lg bg-fintech-blue/5 p-6">
-                    <h3 className="text-2xl font-semibold text-center mb-4">${formData.amount}</h3>
+                    <h3 className="text-2xl font-semibold text-center mb-4">₦{formData.amount}</h3>
                     
                     <div className="space-y-4">
                       <div className="flex justify-between">
@@ -259,7 +258,7 @@ const TransferForm = () => {
                       
                       <div className="flex justify-between">
                         <p className="text-slate-500">Fee</p>
-                        <p className="font-medium">$0.00</p>
+                        <p className="font-medium">₦0.00</p>
                       </div>
                     </div>
                   </div>
@@ -299,7 +298,7 @@ const TransferForm = () => {
                         </div>
                         <h3 className="text-xl font-semibold">Transfer Successful!</h3>
                         <p className="text-slate-500">
-                          ${formData.amount} has been transferred successfully to your {formData.toAccount === 'savings' ? 'Savings' : 'Investment'} Account.
+                          ₦{formData.amount} has been transferred successfully to your {formData.toAccount === 'savings' ? 'Savings' : 'Investment'} Account.
                         </p>
                       </>
                     ) : (
