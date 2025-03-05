@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import AnimatedButton from '@/components/ui/AnimatedButton';
+import { signupUser } from '@/services/api';
+import { toast } from '@/hooks/use-toast';
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -29,13 +31,37 @@ const SignupForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (formData.password !== formData.confirmPassword) {
+      toast({
+        title: "Password Mismatch",
+        description: "Passwords do not match. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await signupUser({
+        email: formData.email,
+        password: formData.password,
+      });
+      
+      toast({
+        title: "Signup Successful",
+        description: "Your account has been created!",
+      });
+      
+      // Navigate to phone number addition screen with the userId
+      navigate(`/add-phone/${response.newUser._id}`);
+    } catch (error) {
+      console.error('Signup failed:', error);
+      // Toast notification is already handled in the API function
+    } finally {
       setIsLoading(false);
-      navigate('/dashboard');
-    }, 1500);
+    }
   };
 
   return (

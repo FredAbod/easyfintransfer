@@ -6,9 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Fingerprint } from 'lucide-react';
 import AnimatedButton from '@/components/ui/AnimatedButton';
+import { loginUser } from '@/services/api';
+import { useAuth } from '@/context/AuthContext';
+import { toast } from '@/hooks/use-toast';
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -24,11 +28,33 @@ const LoginForm = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const userData = await loginUser({
+        email: formData.email,
+        password: formData.password,
+      });
+      
+      // Set user in auth context
+      setUser({
+        _id: userData.user._id,
+        email: userData.user.email,
+        username: userData.user.username || '',
+        phone: userData.user.phoneNumber || '',
+        token: userData.token,
+      });
+      
+      toast({
+        title: "Login Successful",
+        description: "Welcome back!",
+      });
+      
       navigate('/dashboard');
-    }, 1500);
+    } catch (error) {
+      console.error('Login failed:', error);
+      // Toast notification is already handled in the API function
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
