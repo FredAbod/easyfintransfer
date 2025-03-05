@@ -6,6 +6,7 @@ interface User {
   email: string;
   userName?: string;
   phoneNumber?: string;
+  profilePicture?: string;
   accountBalance?: {
     $numberDecimal: string;
   };

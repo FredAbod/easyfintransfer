@@ -1,5 +1,4 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -40,7 +39,7 @@ const Dashboard = () => {
     };
 
     getProfileData();
-  }, [fetchProfile, toast]);
+  }, []);
   
   const displayName = user?.userName || user?.email?.split('@')[0] || 'User';
   
@@ -48,14 +47,25 @@ const Dashboard = () => {
     ? parseFloat(user.accountBalance.$numberDecimal).toFixed(2) 
     : '0.00';
   
+  // Default profile image URL
+  const defaultProfileImage = 'https://res.cloudinary.com/grazac/image/upload/v1719308203/lol_k_gprc9r.jpg';
+  
   return (
     <div className="min-h-screen bg-slate-50 pb-20 md:pl-64">
       <NavBar />
       
       <main className="pt-20 px-4 md:px-8 max-w-5xl mx-auto animate-fade-in">
-        <div className="mb-8">
-          <h2 className="text-2xl font-medium text-slate-900">Welcome back, {displayName}</h2>
-          <p className="text-slate-500">Here's your financial summary</p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-medium text-slate-900">Welcome back, {displayName}</h2>
+            <p className="text-slate-500">Here's your financial summary</p>
+          </div>
+          <img
+            src={user?.profilePicture || defaultProfileImage}
+            alt="Profile"
+            className="w-10 h-10 rounded-full cursor-pointer"
+            onClick={() => navigate('/profile')}
+          />
         </div>
         
         <Card className="mb-6 overflow-hidden shadow-sm card-shadow bg-white">

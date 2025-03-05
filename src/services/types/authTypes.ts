@@ -43,6 +43,7 @@ export interface AuthResponse {
     email: string;
     username?: string;
     phoneNumber?: string;
+    profilePicture?: string; 
   };
   newUser?: {
     _id: string;
