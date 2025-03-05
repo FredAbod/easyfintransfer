@@ -1,144 +1,110 @@
-
-import { toast } from "@/hooks/use-toast";
+import axios from 'axios';
 
 const API_BASE_URL = 'https://miniopay.onrender.com';
 
 // Types
-interface SignupData {
+export interface SignupRequest {
   email: string;
   password: string;
 }
 
-interface SignInData {
+export interface SigninRequest {
   email: string;
   password: string;
 }
 
-interface PhoneNumberData {
+export interface AddPhoneRequest {
   phoneNumber: string;
 }
 
-interface UsernameData {
-  username: string;
+export interface AddUsernameRequest {
+  userName: string;
 }
 
-// API Endpoints
-export const signupUser = async (userData: SignupData) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
+// Updated to match actual API response structure
+export interface AuthResponse {
+  status: string;
+  message: string;
+  data?: {
+    user: {
+      _id: string;
+      email: string;
+      userName?: string;
+      phoneNumber?: string;
+      accountBalance?: {
+        $numberDecimal: string;
+      };
+      createdAt: string;
+      updatedAt: string;
+    };
+    token?: string;
+  };
+  token?: string; // Some endpoints might return token at the top level
+}
 
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to signup');
+// API service functions
+export const authApi = {
+  // Signup user
+  signup: async (data: SignupRequest): Promise<AuthResponse> => {
+    try {
+      console.log("Calling signup API with:", data);
+      const response = await axios.post<AuthResponse>(`${API_BASE_URL}/api/v1/user/signup`, data);
+      console.log("Signup API response:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("Signup API error:", error.response?.data || error.message);
+      if (error.response) {
+        return error.response.data;
+      }
+      throw new Error('Network error occurred');
     }
-    
-    return data;
-  } catch (error) {
-    console.error('Signup error:', error);
-    if (error instanceof Error) {
-      toast({
-        title: "Signup Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-    throw error;
-  }
-};
+  },
 
-export const loginUser = async (credentials: SignInData) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/signIn`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    });
+  // Sign in user
+  signin: async (data: SigninRequest): Promise<AuthResponse> => {
+    try {
+      console.log("Calling signin API with:", data);
+      const response = await axios.post<AuthResponse>(`${API_BASE_URL}/api/v1/user/signIn`, data);
+      console.log("Signin API response:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("Signin API error:", error.response?.data || error.message);
+      if (error.response) {
+        return error.response.data;
+      }
+      throw new Error('Network error occurred');
+    }
+  },
 
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to login');
+  // Add phone number
+  addPhoneNumber: async (userId: string, data: AddPhoneRequest): Promise<AuthResponse> => {
+    try {
+      console.log(`Calling API: PUT ${API_BASE_URL}/api/v1/user/add/${userId}`, data);
+      const response = await axios.put<AuthResponse>(`${API_BASE_URL}/api/v1/user/add/${userId}`, data);
+      console.log("Phone Number API response:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("API error:", error.response?.data || error.message);
+      if (error.response) {
+        return error.response.data;
+      }
+      throw new Error('Network error occurred');
     }
-    
-    return data;
-  } catch (error) {
-    console.error('Login error:', error);
-    if (error instanceof Error) {
-      toast({
-        title: "Login Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-    throw error;
-  }
-};
+  },
 
-export const addPhoneNumber = async (userId: string, phoneData: PhoneNumberData) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/add/${userId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(phoneData),
-    });
-
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to add phone number');
+  // Add username
+  addUsername: async (userId: string, data: AddUsernameRequest): Promise<AuthResponse> => {
+    try {
+      console.log(`Calling API: PUT ${API_BASE_URL}/api/v1/user/addUsername/${userId}`, data);
+      const response = await axios.put<AuthResponse>(`${API_BASE_URL}/api/v1/user/addUsername/${userId}`, data);
+      console.log("Username API response:", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("API error:", error.response?.data || error.message);
+      if (error.response) {
+        return error.response.data;
+      }
+      throw new Error('Network error occurred');
     }
-    
-    return data;
-  } catch (error) {
-    console.error('Add phone error:', error);
-    if (error instanceof Error) {
-      toast({
-        title: "Failed to Add Phone",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-    throw error;
-  }
-};
-
-export const addUsername = async (userId: string, usernameData: UsernameData) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/addUsername/${userId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(usernameData),
-    });
-
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to add username');
-    }
-    
-    return data;
-  } catch (error) {
-    console.error('Add username error:', error);
-    if (error instanceof Error) {
-      toast({
-        title: "Failed to Add Username",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-    throw error;
   }
 };

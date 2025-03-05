@@ -1,40 +1,39 @@
-
+import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import Index from "./pages/Index";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from '@/contexts/AuthContext';
+import Index from '@/pages/Index';
+import Login from '@/pages/Login';
+import Signup from '@/pages/Signup';
+import CompleteProfile from '@/pages/CompleteProfile';
 import NotFound from "./pages/NotFound";
-import LoginForm from "./components/auth/LoginForm";
-import SignupForm from "./components/auth/SignupForm";
-import PhoneNumberForm from "./components/auth/PhoneNumberForm";
-import UsernameForm from "./components/auth/UsernameForm";
 import Dashboard from "./components/dashboard/Dashboard";
 import TransferForm from "./components/transfers/TransferForm";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
+// No need for ProtectedRoute anymore, but keeping it with its new implementation for compatibility
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App: React.FC = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <Router>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/login" element={<div className="min-h-screen bg-slate-50 flex items-center justify-center p-4"><LoginForm /></div>} />
-            <Route path="/signup" element={<div className="min-h-screen bg-slate-50 flex items-center justify-center p-4"><SignupForm /></div>} />
-            <Route path="/add-phone/:userId" element={<div className="min-h-screen bg-slate-50 flex items-center justify-center p-4"><PhoneNumberForm /></div>} />
-            <Route path="/add-username/:userId" element={<div className="min-h-screen bg-slate-50 flex items-center justify-center p-4"><UsernameForm /></div>} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/transfer" element={<ProtectedRoute><TransferForm /></ProtectedRoute>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/complete-profile" element={<CompleteProfile />} />
+            {/* No more protected routes wrapping - access directly */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/transfer" element={<TransferForm />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
+        </Router>
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
