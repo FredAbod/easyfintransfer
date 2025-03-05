@@ -4,3 +4,4 @@ export * from './types/authTypes';
 export * from './types/transactionTypes';
 export * from './authService';
 export * from './transactionService';
+export * from './profileService';

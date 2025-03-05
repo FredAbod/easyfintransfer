@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authApi, AuthResponse } from '@/services/api';
+import { authApi, AuthResponse, profileApi, ProfileResponse } from '@/services/api';
 
 interface User {
   _id: string;
@@ -11,6 +11,7 @@ interface User {
   };
   createdAt?: string;
   updatedAt?: string;
+  accountNumber?: string;
 }
 
 interface AuthContextType {
@@ -24,6 +25,7 @@ interface AuthContextType {
   addUsername: (userName: string) => Promise<AuthResponse>;
   logout: () => void;
   isAuthenticated: boolean;
+  fetchProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -44,8 +46,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(savedToken);
       setUser(JSON.parse(savedUser));
       setIsAuthenticated(true);
+      // Fetch latest profile data when auth context is initialized
+      fetchProfile().catch(err => console.error("Failed to fetch profile on init:", err));
     }
   }, []);
+
+  const fetchProfile = async (): Promise<void> => {
+    const userId = user?._id || localStorage.getItem('userId');
+    
+    if (!userId) {
+      console.error("User ID not available for fetching profile");
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      const response = await profileApi.getUserProfile(userId);
+      
+      if (response.status === 'success' && response.data?.user) {
+        setUser(response.data.user);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      } else {
+        console.warn("Profile response did not contain user data:", response);
+      }
+    } catch (err) {
+      console.error("Error fetching user profile:", err);
+      setError("Failed to load user profile");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const signup = async (email: string, password: string): Promise<AuthResponse> => {
     setLoading(true);
@@ -186,6 +216,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addUsername,
         logout,
         isAuthenticated,
+        fetchProfile,
       }}
     >
       {children}

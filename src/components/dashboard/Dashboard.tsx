@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -8,6 +9,7 @@ import TransactionItem from '@/components/shared/TransactionItem';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 import NavBar from '@/components/shared/NavBar';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/components/ui/use-toast';
 
 const transactions = [
   { id: 1, type: 'incoming' as const, amount: 1250.00, description: 'Salary Deposit', date: 'Today, 10:45 AM' },
@@ -20,7 +22,25 @@ const transactions = [
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
-  const { user } = useAuth();
+  const { user, fetchProfile } = useAuth();
+  const { toast } = useToast();
+  
+  // Fetch the latest user data when the dashboard loads
+  useEffect(() => {
+    const getProfileData = async () => {
+      try {
+        await fetchProfile();
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to load profile data.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    getProfileData();
+  }, [fetchProfile, toast]);
   
   const displayName = user?.userName || user?.email?.split('@')[0] || 'User';
   

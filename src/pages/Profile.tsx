@@ -1,21 +1,45 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import NavBar from '@/components/shared/NavBar';
-import { User, Mail, Phone, Pencil, Shield, LogOut } from 'lucide-react';
+import { User, Mail, Phone, Pencil, Shield, LogOut, CreditCard } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 
 const Profile = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, fetchProfile, loading } = useAuth();
   const navigate = React.useCallback(() => window.location.href = '/', []);
+  const { toast } = useToast();
+
+  // Fetch profile data when the component mounts
+  useEffect(() => {
+    const getProfileData = async () => {
+      try {
+        await fetchProfile();
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to load profile data. Please try again.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    getProfileData();
+  }, [fetchProfile, toast]);
 
   const handleLogout = () => {
     logout();
     navigate();
   };
+
+  // Format the account balance for display
+  const formattedBalance = user?.accountBalance?.$numberDecimal 
+    ? parseFloat(user.accountBalance.$numberDecimal).toFixed(2) 
+    : '0.00';
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20 md:pl-64">
@@ -41,7 +65,13 @@ const Profile = () => {
               </div>
               
               <h3 className="text-xl font-semibold text-center">{user?.userName || 'User'}</h3>
-              <p className="text-slate-500 text-center mb-6">{user?.email}</p>
+              <p className="text-slate-500 text-center mb-4">{user?.email}</p>
+              
+              {/* Display account balance */}
+              <div className="bg-fintech-blue bg-opacity-5 rounded-lg p-4 w-full mb-4 text-center">
+                <p className="text-sm text-slate-600 mb-1">Account Balance</p>
+                <p className="text-2xl font-semibold">${formattedBalance}</p>
+              </div>
               
               <Button 
                 variant="outline" 
@@ -110,6 +140,18 @@ const Profile = () => {
                         <Pencil className="h-4 w-4" />
                       </Button>
                     </div>
+                    
+                    {user?.accountNumber && (
+                      <div className="flex items-center justify-between p-4 bg-slate-50 rounded-md">
+                        <div className="flex items-center">
+                          <CreditCard className="text-slate-500 mr-3 h-5 w-5" />
+                          <div>
+                            <p className="text-sm text-slate-500">Account Number</p>
+                            <p className="font-medium">{user.accountNumber}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </TabsContent>
                 
