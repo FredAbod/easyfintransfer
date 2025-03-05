@@ -100,8 +100,8 @@ const Dashboard = () => {
       <NavBar />
       
       <main className="pt-20 px-4 md:px-8 max-w-5xl mx-auto animate-fade-in">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
+        <div className="mb-8 flex flex-col md:flex-row items-center justify-between">
+          <div className="text-center md:text-left mb-4 md:mb-0">
             <h2 className="text-2xl font-medium text-slate-900">Welcome back, {displayName}</h2>
             <p className="text-slate-500">Here's your financial summary</p>
           </div>
@@ -115,10 +115,10 @@ const Dashboard = () => {
         
         <Card className="mb-6 overflow-hidden shadow-sm card-shadow bg-white">
           <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
+            <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+              <div className="text-center md:text-left mb-4 md:mb-0">
                 <p className="text-sm text-slate-500">Total Balance</p>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center md:justify-start gap-2">
                   {isBalanceVisible ? (
                     <h3 className="text-3xl font-semibold">₦{accountBalance}</h3>
                   ) : (
@@ -138,7 +138,7 @@ const Dashboard = () => {
                 </div>
               </div>
               
-              <div className="flex gap-2">
+              <div className="flex flex-col md:flex-row gap-2">
                 <AnimatedButton 
                   variant="primary"
                   className="gap-2"
@@ -159,7 +159,7 @@ const Dashboard = () => {
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-fintech-blue bg-opacity-5 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className="h-5 w-5 text-fintech-blue" />
@@ -192,26 +192,28 @@ const Dashboard = () => {
           </CardHeader>
           
           <CardContent className="p-6">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {transactions.map((transaction) => (
-                  <tr key={transaction._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">{transaction.description}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">₦{transaction.amount.$numberDecimal}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{transaction.transactionType}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{new Date(transaction.createdAt).toLocaleString()}</td>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {transactions.map((transaction) => (
+                    <tr key={transaction._id}>
+                      <td className="px-4 py-2 whitespace-nowrap">{transaction.description}</td>
+                      <td className="px-4 py-2 whitespace-nowrap">₦{transaction.amount.$numberDecimal}</td>
+                      <td className="px-4 py-2 whitespace-nowrap">{transaction.transactionType}</td>
+                      <td className="px-4 py-2 whitespace-nowrap">{new Date(transaction.createdAt).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </CardContent>
         </Card>
       </main>

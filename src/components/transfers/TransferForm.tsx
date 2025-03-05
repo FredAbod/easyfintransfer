@@ -4,11 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft, Check, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import NavBar from '@/components/shared/NavBar';
 import AnimatedButton from '@/components/ui/AnimatedButton';
+import { apiClient } from '@/services/apiUtils';
 
 const TransferForm = () => {
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ const TransferForm = () => {
   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
   const [formData, setFormData] = useState({
     amount: '',
-    fromAccount: 'main',
-    toAccount: 'savings',
+    fromAccount: '',
+    toAccount: '',
     description: '',
   });
 
@@ -28,13 +28,8 @@ const TransferForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (step === 1) {
-      // Validate amount
       if (!formData.amount || parseFloat(formData.amount) <= 0) {
         toast({
           title: "Invalid amount",
@@ -44,7 +39,6 @@ const TransferForm = () => {
         return;
       }
       
-      // Check if accounts are different
       if (formData.fromAccount === formData.toAccount) {
         toast({
           title: "Same account selected",
@@ -62,25 +56,46 @@ const TransferForm = () => {
       setStep(3);
       setIsLoading(true);
       
-      // Simulate API call
-      setTimeout(() => {
-        setIsLoading(false);
-        const success = Math.random() > 0.2; // 80% chance of success
-        setIsSuccess(success);
-        
-        if (success) {
+      try {
+        const response = await apiClient.post<{ status: string }>('/api/v1/trx/transfer', {
+          senderUserName: formData.fromAccount,
+          receiverUserName: formData.toAccount,
+          amount: parseFloat(formData.amount),
+          description: formData.description,
+        });
+
+        if (response.data.status === "success") {
+          setIsSuccess(true);
           toast({
-            title: "Transfer successful!",
-            description: `₦${formData.amount} has been transferred successfully.`,
+            title: "Success",
+            description: "Transfer completed successfully.",
+            variant: "default", 
           });
+
+          setIsLoading(false);
+
+          // Wait for 5 seconds before redirecting and resetting the form
+          setTimeout(() => {
+            setFormData({
+              amount: '',
+              fromAccount: '',
+              toAccount: '',
+              description: '',
+            });
+            navigate('/dashboard');
+          }, 5000);
         } else {
-          toast({
-            title: "Transfer failed",
-            description: "There was an issue with your transfer. Please try again.",
-            variant: "destructive",
-          });
+          throw new Error("Transfer failed");
         }
-      }, 2000);
+      } catch (error) {
+        setIsLoading(false);
+        setIsSuccess(false);
+        toast({
+          title: "Error",
+          description: "Failed to complete transfer.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -97,15 +112,11 @@ const TransferForm = () => {
   };
 
   const formatCurrency = (value: string) => {
-    // Remove non-digit characters
     const digits = value.replace(/[^\d.]/g, '');
-    
-    // Ensure only one decimal point
     const parts = digits.split('.');
     if (parts.length > 2) {
       return parts[0] + '.' + parts.slice(1).join('');
     }
-    
     return digits;
   };
 
@@ -114,6 +125,8 @@ const TransferForm = () => {
     const formattedValue = formatCurrency(value);
     setFormData((prev) => ({ ...prev, amount: formattedValue }));
   };
+
+  console.log("Form Data:", formData);
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20 md:pl-64">
@@ -168,34 +181,26 @@ const TransferForm = () => {
                   
                   <div className="space-y-2">
                     <Label htmlFor="fromAccount">From Account</Label>
-                    <Select
+                    <Input
+                      id="fromAccount"
+                      name="fromAccount"
+                      placeholder="Enter sender username"
                       value={formData.fromAccount}
-                      onValueChange={(value) => handleSelectChange('fromAccount', value)}
-                    >
-                      <SelectTrigger id="fromAccount" className="h-12">
-                        <SelectValue placeholder="Select account" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="main">Main Account (₦8,250.50)</SelectItem>
-                        <SelectItem value="business">Business Account (₦3,120.25)</SelectItem>
-                      </SelectContent>
-                    </Select>
+                      onChange={handleChange}
+                      className="h-12"
+                    />
                   </div>
                   
                   <div className="space-y-2">
                     <Label htmlFor="toAccount">To Account</Label>
-                    <Select
+                    <Input
+                      id="toAccount"
+                      name="toAccount"
+                      placeholder="Enter receiver username"
                       value={formData.toAccount}
-                      onValueChange={(value) => handleSelectChange('toAccount', value)}
-                    >
-                      <SelectTrigger id="toAccount" className="h-12">
-                        <SelectValue placeholder="Select account" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="savings">Savings Account (₦2,430.15)</SelectItem>
-                        <SelectItem value="investment">Investment Account (₦5,670.80)</SelectItem>
-                      </SelectContent>
-                    </Select>
+                      onChange={handleChange}
+                      className="h-12"
+                    />
                   </div>
                   
                   <div className="space-y-2">
@@ -233,20 +238,12 @@ const TransferForm = () => {
                     <div className="space-y-4">
                       <div className="flex justify-between">
                         <p className="text-slate-500">From</p>
-                        <p className="font-medium">
-                          {formData.fromAccount === 'main' 
-                            ? 'Main Account' 
-                            : 'Business Account'}
-                        </p>
+                        <p className="font-medium">{formData.fromAccount}</p>
                       </div>
                       
                       <div className="flex justify-between">
                         <p className="text-slate-500">To</p>
-                        <p className="font-medium">
-                          {formData.toAccount === 'savings' 
-                            ? 'Savings Account' 
-                            : 'Investment Account'}
-                        </p>
+                        <p className="font-medium">{formData.toAccount}</p>
                       </div>
                       
                       {formData.description && (
@@ -298,7 +295,7 @@ const TransferForm = () => {
                         </div>
                         <h3 className="text-xl font-semibold">Transfer Successful!</h3>
                         <p className="text-slate-500">
-                          ₦{formData.amount} has been transferred successfully to your {formData.toAccount === 'savings' ? 'Savings' : 'Investment'} Account.
+                          ₦{formData.amount} has been transferred successfully to {formData.toAccount}.
                         </p>
                       </>
                     ) : (
