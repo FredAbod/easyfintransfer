@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 
 const API_BASE_URL = 'https://miniopay.onrender.com';
@@ -55,6 +56,9 @@ export interface AuthResponse {
   newUser?: {
     _id: string;
   };
+  // Additional properties needed for UsernameForm component
+  email?: string;
+  phoneNumber?: string;
 }
 
 // API service functions
@@ -196,6 +200,13 @@ export const addUsername = async (userId: string, data: { username: string }): P
     if (response.status === 'success' && response.data?.user) {
       return {
         ...response,
+        user: {
+          _id: response.data.user._id,
+          email: response.data.user.email,
+          username: response.data.user.userName,
+          phoneNumber: response.data.user.phoneNumber,
+        },
+        // Add these properties at the top level for UsernameForm
         email: response.data.user.email,
         phoneNumber: response.data.user.phoneNumber
       };
