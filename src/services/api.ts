@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 const API_BASE_URL = 'https://miniopay.onrender.com';
@@ -46,6 +45,16 @@ export interface AuthResponse {
     token?: string;
   };
   token?: string; // Some endpoints might return token at the top level
+  // For backwards compatibility with unused components
+  user?: {
+    _id: string;
+    email: string;
+    username?: string;
+    phoneNumber?: string;
+  };
+  newUser?: {
+    _id: string;
+  };
 }
 
 // API service functions
@@ -132,7 +141,67 @@ export const depositFunds = async (data: DepositRequest): Promise<AuthResponse> 
 };
 
 // Export individual functions for the unused components to resolve build errors
-export const loginUser = authApi.signin;
-export const signupUser = authApi.signup;
-export const addPhoneNumber = authApi.addPhoneNumber;
-export const addUsername = authApi.addUsername;
+export const loginUser = async (data: SigninRequest): Promise<AuthResponse> => {
+  try {
+    const response = await authApi.signin(data);
+    // Map the response for compatibility with the unused LoginForm component
+    if (response.status === 'success' && response.data?.user) {
+      return {
+        ...response,
+        user: {
+          _id: response.data.user._id,
+          email: response.data.user.email,
+          username: response.data.user.userName,
+          phoneNumber: response.data.user.phoneNumber,
+        }
+      };
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const signupUser = async (data: SignupRequest): Promise<AuthResponse> => {
+  try {
+    const response = await authApi.signup(data);
+    // Map the response for compatibility with the unused SignupForm component
+    if (response.status === 'success' && response.data?.user) {
+      return {
+        ...response,
+        newUser: {
+          _id: response.data.user._id
+        }
+      };
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addPhoneNumber = async (userId: string, data: AddPhoneRequest): Promise<AuthResponse> => {
+  return authApi.addPhoneNumber(userId, data);
+};
+
+export const addUsername = async (userId: string, data: { username: string }): Promise<AuthResponse> => {
+  // Convert userName to the correct property name for the API
+  const apiData: AddUsernameRequest = {
+    userName: data.username
+  };
+  
+  try {
+    const response = await authApi.addUsername(userId, apiData);
+    // Map the response for compatibility with the unused UsernameForm component
+    if (response.status === 'success' && response.data?.user) {
+      return {
+        ...response,
+        email: response.data.user.email,
+        phoneNumber: response.data.user.phoneNumber
+      };
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
