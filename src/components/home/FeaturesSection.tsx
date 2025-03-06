@@ -1,10 +1,14 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Zap, Shield, PiggyBank, ArrowRight, Globe, BarChart3, Clock, Smartphone } from 'lucide-react';
+
 const FeaturesSection = () => {
   const navigate = useNavigate();
-  return <section id="features" className="py-16 bg-white">
+  
+  return (
+    <section id="features" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-4 inline-block">
@@ -21,7 +25,7 @@ const FeaturesSection = () => {
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               <Zap className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-medium mb-3 bg-gray-800">Instant Transfers</h3>
+            <h3 className="text-xl font-medium mb-3 text-slate-900">Instant Transfers</h3>
             <p className="text-slate-600 flex-grow">
               Send and receive money instantly with our lightning-fast payment system. No delays, no waiting.
             </p>
@@ -31,7 +35,7 @@ const FeaturesSection = () => {
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               <Shield className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-medium mb-3">Bank-Level Security</h3>
+            <h3 className="text-xl font-medium mb-3 text-slate-900">Bank-Level Security</h3>
             <p className="text-slate-600 flex-grow">
               Rest easy knowing your money and data are protected by state-of-the-art encryption and security protocols.
             </p>
@@ -41,7 +45,7 @@ const FeaturesSection = () => {
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               <PiggyBank className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-medium mb-3">Smart Savings</h3>
+            <h3 className="text-xl font-medium mb-3 text-slate-900">Smart Savings</h3>
             <p className="text-slate-600 flex-grow">
               Achieve your financial goals faster with our intelligent savings tools and personalized recommendations.
             </p>
@@ -51,7 +55,7 @@ const FeaturesSection = () => {
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               <Globe className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-medium mb-3">Global Access</h3>
+            <h3 className="text-xl font-medium mb-3 text-slate-900">Global Access</h3>
             <p className="text-slate-600 flex-grow">
               Access your money from anywhere in the world, with multi-currency support and competitive exchange rates.
             </p>
@@ -61,7 +65,7 @@ const FeaturesSection = () => {
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               <BarChart3 className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-medium mb-3">Spending Analytics</h3>
+            <h3 className="text-xl font-medium mb-3 text-slate-900">Spending Analytics</h3>
             <p className="text-slate-600 flex-grow">
               Gain valuable insights into your spending habits with detailed analytics and visualizations.
             </p>
@@ -71,7 +75,7 @@ const FeaturesSection = () => {
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               <Clock className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-medium mb-3">Scheduled Payments</h3>
+            <h3 className="text-xl font-medium mb-3 text-slate-900">Scheduled Payments</h3>
             <p className="text-slate-600 flex-grow">
               Set up recurring transfers and bill payments to automate your financial routines and never miss a deadline.
             </p>
@@ -81,7 +85,7 @@ const FeaturesSection = () => {
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               <Smartphone className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-medium mb-3">Mobile Access</h3>
+            <h3 className="text-xl font-medium mb-3 text-slate-900">Mobile Access</h3>
             <p className="text-slate-600 flex-grow">
               Manage your finances on the go with our intuitive mobile app, available for both iOS and Android devices.
             </p>
@@ -91,7 +95,7 @@ const FeaturesSection = () => {
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               <Shield className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-medium mb-3">24/7 Support</h3>
+            <h3 className="text-xl font-medium mb-3 text-slate-900">24/7 Support</h3>
             <p className="text-slate-600 flex-grow">
               Get help whenever you need it with our round-the-clock customer support team, available via chat, email, or phone.
             </p>
@@ -105,6 +109,8 @@ const FeaturesSection = () => {
           </Button>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default FeaturesSection;
