@@ -52,7 +52,8 @@ const Deposit = () => {
     setIsLoading(true);
     
     const config = {
-      public_key: 'FLWPUBK_TEST-8fd128bcb46353c3129ff772b4ad440f-X',
+      // public_key: 'FLWPUBK_TEST-8fd128bcb46353c3129ff772b4ad440f-X',
+      public_key: 'FLWPUBK-256b84ddd84dd970604f7a3a6cdd9c44-X',
       tx_ref: Date.now().toString(),
       amount: Number(amount),
       currency: 'NGN',
