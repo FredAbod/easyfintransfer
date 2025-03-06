@@ -1,5 +1,4 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,12 +12,14 @@ const Profile = () => {
   const { user, logout, fetchProfile, loading } = useAuth();
   const navigate = React.useCallback(() => window.location.href = '/', []);
   const { toast } = useToast();
+  const [profileFetched, setProfileFetched] = useState(false);
 
   // Fetch profile data when the component mounts
   useEffect(() => {
     const getProfileData = async () => {
       try {
         await fetchProfile();
+        setProfileFetched(true);
       } catch (error) {
         toast({
           title: "Error",
@@ -28,8 +29,10 @@ const Profile = () => {
       }
     };
 
-    getProfileData();
-  }, [fetchProfile, toast]);
+    if (!profileFetched) {
+      getProfileData();
+    }
+  }, [fetchProfile, toast, profileFetched]);
 
   const handleLogout = () => {
     logout();

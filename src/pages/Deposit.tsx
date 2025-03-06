@@ -9,6 +9,7 @@ import NavBar from '@/components/shared/NavBar';
 import { useAuth } from '@/contexts/AuthContext';
 import { AtSign, DollarSign, CreditCard, Wallet, ArrowRight } from 'lucide-react';
 import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@radix-ui/react-dialog';
 
 const Deposit = () => {
   const navigate = useNavigate();
@@ -52,8 +53,8 @@ const Deposit = () => {
     setIsLoading(true);
     
     const config = {
-      // public_key: 'FLWPUBK_TEST-8fd128bcb46353c3129ff772b4ad440f-X',
-      public_key: 'FLWPUBK-256b84ddd84dd970604f7a3a6cdd9c44-X',
+      public_key: 'FLWPUBK_TEST-8fd128bcb46353c3129ff772b4ad440f-X',
+      // public_key: 'FLWPUBK-256b84ddd84dd970604f7a3a6cdd9c44-X',
       tx_ref: Date.now().toString(),
       amount: Number(amount),
       currency: 'NGN',
@@ -105,6 +106,16 @@ const Deposit = () => {
           <p className="text-slate-500">Add money to your account</p>
         </div>
         
+        <Dialog>
+          <DialogContent>
+            <DialogTitle>Deposit Confirmation</DialogTitle>
+            <DialogDescription>
+              Please confirm your deposit details before proceeding.
+            </DialogDescription>
+            {/* Your dialog content goes here */}
+          </DialogContent>
+        </Dialog>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="md:col-span-2 shadow-sm bg-white">
             <CardHeader>

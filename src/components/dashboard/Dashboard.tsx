@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
   const { user, fetchProfile } = useAuth();
   const { toast } = useToast();
+  const [profileFetched, setProfileFetched] = useState(false);
   
   useEffect(() => {
     // Dummy data for testing
@@ -46,6 +47,7 @@ const Dashboard = () => {
     const getProfileData = async () => {
       try {
         await fetchProfile();
+        setProfileFetched(true);
       } catch (error) {
         toast({
           title: "Error",
@@ -55,8 +57,10 @@ const Dashboard = () => {
       }
     };
 
-    getProfileData();
-  }, []);
+    if (user?._id && !profileFetched) {
+      getProfileData();
+    }
+  }, [user?._id, fetchProfile, toast, profileFetched]);
   
   // Fetch transaction history
   useEffect(() => {
@@ -84,7 +88,7 @@ const Dashboard = () => {
     if (user?._id) {
       fetchTransactions();
     }
-  }, [user?._id]);
+  }, [user?._id, toast]);
 
   const displayName = user?.userName || user?.email?.split('@')[0] || 'User';
   

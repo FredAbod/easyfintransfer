@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Header from '@/components/home/Header';
 import HeroSection from '@/components/home/HeroSection';
@@ -12,8 +11,12 @@ const Index = () => {
     <div className="min-h-screen bg-slate-50">
       <Header />
       <HeroSection />
-      <FeaturesSection />
-      <HowItWorksSection />
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-12">
+        <FeaturesSection />
+      </div>
+      <div className="bg-gradient-to-r from-green-500 to-teal-600 text-white py-12">
+        <HowItWorksSection />
+      </div>
       <TestimonialsSection />
       <Footer />
     </div>
