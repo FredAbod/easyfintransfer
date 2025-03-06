@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { CreditCard, Shield, Smartphone, ArrowRight } from 'lucide-react';
+import { CreditCard, Shield, Smartphone, ArrowRight, Zap, LineChart, PiggyBank, UserPlus, Layout, SendHorizontal } from 'lucide-react';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 
 const Index = () => {
@@ -129,11 +130,11 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-slate-50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow animate-in">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                <Smartphone className="h-6 w-6 text-primary" />
+                <Zap className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="text-xl font-medium mb-3">Mobile First</h3>
+              <h3 className="text-xl font-medium mb-3">Instant Transfers</h3>
               <p className="text-slate-600">
-                Designed for the modern user, our platform works seamlessly on all devices.
+                Send and receive money instantly with our lightning-fast payment system. No delays, no waiting.
               </p>
             </div>
             
@@ -141,21 +142,32 @@ const Index = () => {
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
                 <Shield className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="text-xl font-medium mb-3">Secure Transfers</h3>
+              <h3 className="text-xl font-medium mb-3">Bank-Level Security</h3>
               <p className="text-slate-600">
-                Built with security in mind, all your financial data and transactions are protected.
+                Rest easy knowing your money and data are protected by state-of-the-art encryption and security protocols.
               </p>
             </div>
             
             <div className="bg-slate-50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow animate-in">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                <CreditCard className="h-6 w-6 text-primary" />
+                <PiggyBank className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="text-xl font-medium mb-3">Zero Fees</h3>
+              <h3 className="text-xl font-medium mb-3">Smart Savings</h3>
               <p className="text-slate-600">
-                Transfer money between your accounts without any hidden charges or fees.
+                Achieve your financial goals faster with our intelligent savings tools and personalized recommendations.
               </p>
             </div>
+          </div>
+          
+          <div className="text-center mt-10">
+            <Button 
+              variant="outline"
+              onClick={() => navigate('/features')}
+              className="gap-2"
+            >
+              Explore All Features
+              <ArrowRight className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </section>
@@ -166,33 +178,54 @@ const Index = () => {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl font-semibold text-slate-900 mb-4">How It Works</h2>
             <p className="text-lg text-slate-600">
-              Getting started with EasyFinTransfer is simple and straightforward.
+              Getting started with Moneta is simple and straightforward.
             </p>
           </div>
           
-          <div className="flex flex-col md:flex-row gap-8 items-center">
-            <div className="bg-white rounded-xl p-6 shadow-sm md:w-1/3 animate-in">
-              <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center mb-4 font-bold">1</div>
-              <h3 className="text-xl font-medium mb-2">Create an Account</h3>
-              <p className="text-slate-600">
-                Sign up for an account with your email and set a secure password.
-              </p>
+          <div className="flex flex-col md:flex-row gap-8 items-stretch">
+            <div className="bg-white rounded-xl p-6 shadow-sm md:w-1/3 animate-in flex flex-col">
+              <div className="mb-4 flex items-center gap-4">
+                <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
+                <h3 className="text-xl font-medium">Create an Account</h3>
+              </div>
+              <div className="flex-grow">
+                <p className="text-slate-600">
+                  Sign up in minutes with just your email and password. Our streamlined process gets you started quickly and securely.
+                </p>
+              </div>
+              <div className="mt-4 text-primary">
+                <UserPlus className="h-8 w-8 mx-auto opacity-50" />
+              </div>
             </div>
             
-            <div className="bg-white rounded-xl p-6 shadow-sm md:w-1/3 animate-in">
-              <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center mb-4 font-bold">2</div>
-              <h3 className="text-xl font-medium mb-2">Link Your Accounts</h3>
-              <p className="text-slate-600">
-                Connect your bank accounts securely to start transferring money.
-              </p>
+            <div className="bg-white rounded-xl p-6 shadow-sm md:w-1/3 animate-in flex flex-col">
+              <div className="mb-4 flex items-center gap-4">
+                <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">2</div>
+                <h3 className="text-xl font-medium">Verify Identity</h3>
+              </div>
+              <div className="flex-grow">
+                <p className="text-slate-600">
+                  Enhance your account security by adding your phone number and creating a unique username that represents you.
+                </p>
+              </div>
+              <div className="mt-4 text-primary">
+                <Shield className="h-8 w-8 mx-auto opacity-50" />
+              </div>
             </div>
             
-            <div className="bg-white rounded-xl p-6 shadow-sm md:w-1/3 animate-in">
-              <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center mb-4 font-bold">3</div>
-              <h3 className="text-xl font-medium mb-2">Start Transferring</h3>
-              <p className="text-slate-600">
-                Send money between your accounts with just a few taps.
-              </p>
+            <div className="bg-white rounded-xl p-6 shadow-sm md:w-1/3 animate-in flex flex-col">
+              <div className="mb-4 flex items-center gap-4">
+                <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">3</div>
+                <h3 className="text-xl font-medium">Start Using Moneta</h3>
+              </div>
+              <div className="flex-grow">
+                <p className="text-slate-600">
+                  Access your dashboard, send money, track transactions, and manage your finances with our intuitive interface.
+                </p>
+              </div>
+              <div className="mt-4 text-primary">
+                <SendHorizontal className="h-8 w-8 mx-auto opacity-50" />
+              </div>
             </div>
           </div>
           
@@ -201,9 +234,9 @@ const Index = () => {
               variant="primary"
               size="lg"
               className="gap-2"
-              onClick={() => navigate('/signup')}
+              onClick={() => navigate('/how-it-works')}
             >
-              Get Started Now
+              Learn More
               <ArrowRight className="h-5 w-5" />
             </AnimatedButton>
           </div>
