@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { CreditCard, ArrowRight } from 'lucide-react';
+import { CreditCard, ArrowRight, Star, Shield, Clock } from 'lucide-react';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 
 const HeroSection = () => {
@@ -16,9 +16,32 @@ const HeroSection = () => {
             <h2 className="text-4xl md:text-5xl font-semibold text-slate-900 mb-6 leading-tight">
               Simple, Secure <span className="text-primary">Money Transfers</span> in Seconds
             </h2>
-            <p className="text-lg text-slate-600 mb-8">
+            <p className="text-lg text-slate-600 mb-6">
               Easily move money between your accounts with our intuitive and secure platform. No fees, no waiting, no hassle.
             </p>
+            
+            {/* Highlighted benefits */}
+            <div className="mb-8 space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center">
+                  <Clock className="h-3 w-3 text-green-600" />
+                </div>
+                <p className="text-slate-700">Lightning-fast transfers in under 5 seconds</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center">
+                  <Shield className="h-3 w-3 text-green-600" />
+                </div>
+                <p className="text-slate-700">Bank-level encryption and security protocols</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center">
+                  <Star className="h-3 w-3 text-green-600" />
+                </div>
+                <p className="text-slate-700">Rated 4.9/5 by over 10,000 satisfied users</p>
+              </div>
+            </div>
+            
             <div className="flex flex-col sm:flex-row gap-4">
               <AnimatedButton 
                 variant="primary"
@@ -72,6 +95,35 @@ const HeroSection = () => {
                     </div>
                     <p className="font-medium text-red-600">-$85.25</p>
                   </div>
+                </div>
+                <div className="bg-white/50 rounded-lg p-4 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <CreditCard className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Netflix Subscription</p>
+                        <p className="text-sm text-slate-500">3 days ago</p>
+                      </div>
+                    </div>
+                    <p className="font-medium text-red-600">-$14.99</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Mobile app promo banner */}
+              <div className="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                <p className="text-center text-sm text-slate-700 font-medium">
+                  Download our mobile app for on-the-go access
+                </p>
+                <div className="flex justify-center gap-2 mt-2">
+                  <Button variant="outline" size="sm" className="text-xs h-8">
+                    App Store
+                  </Button>
+                  <Button variant="outline" size="sm" className="text-xs h-8">
+                    Google Play
+                  </Button>
                 </div>
               </div>
             </div>
