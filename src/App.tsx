@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -15,6 +14,8 @@ import Dashboard from "./components/dashboard/Dashboard";
 import TransferForm from "./components/transfers/TransferForm";
 import Profile from "./pages/Profile";
 import Deposit from "./pages/Deposit";
+import Features from './pages/Features';
+import HowItWorks from './pages/HowItWorks';
 
 const queryClient = new QueryClient();
 
@@ -27,10 +28,11 @@ const App: React.FC = () => (
         <Router>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/features" element={<Features />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/complete-profile" element={<CompleteProfile />} />
-            {/* No more protected routes wrapping - access directly */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/transfer" element={<TransferForm />} />
             <Route path="/profile" element={<Profile />} />
