@@ -1,15 +1,11 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { CreditCard, ArrowRight, Star, Shield, Clock } from 'lucide-react';
 import AnimatedButton from '@/components/ui/AnimatedButton';
-
 const HeroSection = () => {
   const navigate = useNavigate();
-  
-  return (
-    <section className="py-16 md:py-24">
+  return <section className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 md:pr-12 animate-slide-up">
@@ -23,40 +19,19 @@ const HeroSection = () => {
             {/* Highlighted benefits */}
             <div className="mb-8 space-y-3">
               <div className="flex items-center gap-2">
-                <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center">
-                  <Clock className="h-3 w-3 text-green-600" />
-                </div>
-                <p className="text-slate-700">Lightning-fast transfers in under 5 seconds</p>
+                
+                
               </div>
-              <div className="flex items-center gap-2">
-                <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center">
-                  <Shield className="h-3 w-3 text-green-600" />
-                </div>
-                <p className="text-slate-700">Bank-level encryption and security protocols</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-5 w-5 rounded-full bg-green-100 flex items-center justify-center">
-                  <Star className="h-3 w-3 text-green-600" />
-                </div>
-                <p className="text-slate-700">Rated 4.9/5 by over 10,000 satisfied users</p>
-              </div>
+              
+              
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <AnimatedButton 
-                variant="primary"
-                size="lg"
-                className="gap-2"
-                onClick={() => navigate('/signup')}
-              >
+              <AnimatedButton variant="primary" size="lg" className="gap-2" onClick={() => navigate('/signup')}>
                 Get Started
                 <ArrowRight className="h-5 w-5" />
               </AnimatedButton>
-              <Button 
-                variant="outline"
-                size="lg"
-                onClick={() => navigate('/login')}
-              >
+              <Button variant="outline" size="lg" onClick={() => navigate('/login')}>
                 Log in
               </Button>
             </div>
@@ -130,8 +105,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
