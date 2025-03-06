@@ -17,15 +17,47 @@ const FeaturesSection = () => {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+          <div className="bg-slate-50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow animate-in flex flex-col">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-medium mb-3 bg-gray-800">Instant Transfers</h3>
+            <p className="text-slate-600 flex-grow">
+              Send and receive money instantly with our lightning-fast payment system. No delays, no waiting.
+            </p>
+          </div>
           
+          <div className="bg-slate-50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow animate-in flex flex-col">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+              <Shield className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-medium mb-3">Bank-Level Security</h3>
+            <p className="text-slate-600 flex-grow">
+              Rest easy knowing your money and data are protected by state-of-the-art encryption and security protocols.
+            </p>
+          </div>
           
+          <div className="bg-slate-50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow animate-in flex flex-col">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+              <PiggyBank className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-medium mb-3">Smart Savings</h3>
+            <p className="text-slate-600 flex-grow">
+              Achieve your financial goals faster with our intelligent savings tools and personalized recommendations.
+            </p>
+          </div>
           
+          <div className="bg-slate-50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow animate-in flex flex-col">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+              <Globe className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="text-xl font-medium mb-3">Global Access</h3>
+            <p className="text-slate-600 flex-grow">
+              Access your money from anywhere in the world, with multi-currency support and competitive exchange rates.
+            </p>
+          </div>
           
-          
-          
-          
-          
-          <div className="rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow animate-in flex flex-col bg-gray-800">
+          <div className="bg-slate-50 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow animate-in flex flex-col">
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
               <BarChart3 className="h-6 w-6 text-primary" />
             </div>
