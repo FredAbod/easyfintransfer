@@ -1,14 +1,10 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserPlus, Shield, SendHorizontal, ArrowRight, ChevronRight, CreditCard, Smartphone, Bell } from 'lucide-react';
 import AnimatedButton from '@/components/ui/AnimatedButton';
-
 const HowItWorksSection = () => {
   const navigate = useNavigate();
-  
-  return (
-    <section id="how-it-works" className="py-16 bg-slate-50">
+  return <section id="how-it-works" className="py-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-4 inline-block">
@@ -21,7 +17,7 @@ const HowItWorksSection = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-white rounded-xl p-6 shadow-sm animate-in flex flex-col">
+          <div className="rounded-xl p-6 shadow-sm animate-in flex flex-col bg-zinc-800">
             <div className="mb-4 flex items-center gap-4">
               <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
               <h3 className="text-xl font-medium">Create an Account</h3>
@@ -159,11 +155,9 @@ const HowItWorksSection = () => {
                       <div>
                         <p className="font-medium text-sm">John Doe</p>
                         <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <svg key={i} className="h-3 w-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                          {[...Array(5)].map((_, i) => <svg key={i} className="h-3 w-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
                               <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                            </svg>
-                          ))}
+                            </svg>)}
                         </div>
                       </div>
                     </div>
@@ -179,11 +173,9 @@ const HowItWorksSection = () => {
                       <div>
                         <p className="font-medium text-sm">Amanda Smith</p>
                         <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <svg key={i} className="h-3 w-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                          {[...Array(5)].map((_, i) => <svg key={i} className="h-3 w-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
                               <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                            </svg>
-                          ))}
+                            </svg>)}
                         </div>
                       </div>
                     </div>
@@ -198,19 +190,12 @@ const HowItWorksSection = () => {
         </div>
         
         <div className="text-center mt-12">
-          <AnimatedButton 
-            variant="primary"
-            size="lg"
-            className="gap-2"
-            onClick={() => navigate('/how-it-works')}
-          >
+          <AnimatedButton variant="primary" size="lg" className="gap-2" onClick={() => navigate('/how-it-works')}>
             Learn More
             <ArrowRight className="h-5 w-5" />
           </AnimatedButton>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HowItWorksSection;
