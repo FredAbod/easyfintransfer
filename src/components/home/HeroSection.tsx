@@ -1,11 +1,15 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { CreditCard, ArrowRight, Star, Shield, Clock } from 'lucide-react';
+import { CreditCard, ArrowRight, Shield, Clock, Star } from 'lucide-react';
 import AnimatedButton from '@/components/ui/AnimatedButton';
+
 const HeroSection = () => {
   const navigate = useNavigate();
-  return <section className="py-16 md:py-24">
+  
+  return (
+    <section className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 md:pr-12 animate-slide-up">
@@ -19,23 +23,45 @@ const HeroSection = () => {
             {/* Highlighted benefits */}
             <div className="mb-8 space-y-3">
               <div className="flex items-center gap-2">
-                
-                
+                <Shield className="h-5 w-5 text-primary" />
+                <span className="text-slate-700">Bank-level security protection</span>
               </div>
-              
-              
+              <div className="flex items-center gap-2">
+                <Clock className="h-5 w-5 text-primary" />
+                <span className="text-slate-700">Instant transfers, 24/7 availability</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Star className="h-5 w-5 text-primary" />
+                <span className="text-slate-700">Rated 4.9/5 by our customers</span>
+              </div>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <AnimatedButton variant="primary" size="lg" className="gap-2" onClick={() => navigate('/signup')}>
-                Get Started
-                <ArrowRight className="h-5 w-5" />
-              </AnimatedButton>
-              <Button variant="outline" size="lg" onClick={() => navigate('/login')}>
+              <Button 
+                variant="default" 
+                size="lg" 
+                className="relative overflow-hidden group px-8 py-6 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() => navigate('/signup')}
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2 text-lg font-medium">
+                  Get Started
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </span>
+                <span className="absolute inset-0 bg-white/10 rounded-xl scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"></span>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="px-8 py-6 rounded-xl text-lg font-medium border-2 border-slate-300 hover:border-primary hover:bg-primary/5 text-slate-700 hover:text-primary transition-all duration-300"
+                onClick={() => navigate('/login')}
+              >
                 Log in
               </Button>
             </div>
           </div>
+          
+          {/* Right side content - transaction preview */}
           <div className="md:w-1/2 mt-12 md:mt-0 animate-scale">
             <div className="glass-panel rounded-3xl overflow-hidden max-w-md mx-auto p-6 md:p-8">
               <div className="bg-primary rounded-xl p-4 text-white mb-6">
@@ -105,6 +131,8 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HeroSection;
