@@ -14,3 +14,15 @@ export const depositFunds = async (data: DepositRequest): Promise<AuthResponse> 
     return handleApiError(error, 'Deposit failed');
   }
 };
+
+// Withdraw funds
+export const withdrawFunds = async (data: any): Promise<AuthResponse> => {
+  try {
+    console.log(`Calling Withdraw API with:`, data);
+    const response = await apiClient.post<AuthResponse>('/api/v1/user/withdraw', data);
+    console.log("Withdraw API response:", response.data);
+    return response.data;
+  } catch (error: any) {
+    return handleApiError(error, 'Withdrawal failed');
+  }
+};

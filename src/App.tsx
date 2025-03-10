@@ -1,48 +1,38 @@
 import React from 'react';
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
-import Index from '@/pages/Index';
-import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
-import CompleteProfile from '@/pages/CompleteProfile';
-import NotFound from "./pages/NotFound";
-import Dashboard from "./components/dashboard/Dashboard";
-import TransferForm from "./components/transfers/TransferForm";
-import Profile from "./pages/Profile";
-import Deposit from "./pages/Deposit";
-import Features from './pages/Features';
-import HowItWorks from './pages/HowItWorks';
+import Signin from '@/pages/Signin';
+import Profile from '@/pages/Profile';
+import Home from '@/pages/Index';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import Dashboard from '@/components/dashboard/Dashboard';
+import TransferForm from '@/components/transfers/TransferForm';
+import Deposit from '@/pages/Deposit';
+import Withdraw from '@/pages/Withdraw';
 
-const queryClient = new QueryClient();
-
-const App: React.FC = () => (
-  <QueryClientProvider client={queryClient}>
+const App: React.FC = () => {
+  return (
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <Router>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/features" element={<Features />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/complete-profile" element={<CompleteProfile />} />
+      <Router>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+          
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/transfer" element={<TransferForm />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/transfer" element={<TransferForm />} />
             <Route path="/deposit" element={<Deposit />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
-      </TooltipProvider>
+            <Route path="/withdraw" element={<Withdraw />} />
+          </Route>
+        </Routes>
+      </Router>
     </AuthProvider>
-  </QueryClientProvider>
-);
+  );
+};
 
 export default App;

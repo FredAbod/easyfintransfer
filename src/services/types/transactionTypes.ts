@@ -1,7 +1,18 @@
+
 // Transaction request types
 export interface DepositRequest {
   email: string;
   amount: number;
+}
+
+export interface WithdrawRequest {
+  account_bank: string;
+  account_number: string;
+  amount: number;
+  narration: string;
+  currency: string;
+  reference: string;
+  debit_currency: string;
 }
 
 // Profile response type
