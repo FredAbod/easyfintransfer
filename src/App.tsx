@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import Signup from '@/pages/Signup';
 import Signin from '@/pages/Signin';
+import Login from '@/pages/Login';
 import Profile from '@/pages/Profile';
 import Home from '@/pages/Index';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
@@ -21,6 +22,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
+          <Route path="/login" element={<Login />} />
           
           {/* Protected routes - using Route's nesting capability */}
           <Route element={<ProtectedRoute />}>

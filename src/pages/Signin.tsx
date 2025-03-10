@@ -16,6 +16,9 @@ const Signin = () => {
   React.useEffect(() => {
     if (user) {
       navigate('/dashboard');
+    } else {
+      // Redirect to the login page
+      navigate('/login');
     }
   }, [user, navigate]);
 
@@ -29,11 +32,10 @@ const Signin = () => {
             <CardHeader className="space-y-1">
               <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
               <CardDescription className="text-center">
-                Enter your email and password to sign in to your account
+                Redirecting to login page...
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
-              {/* Login form would go here, but we'll redirect to the Login page for now */}
               <div className="text-center py-4">Redirecting to login...</div>
             </CardContent>
             <CardFooter className="flex flex-col">
