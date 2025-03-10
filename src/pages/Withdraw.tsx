@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +9,8 @@ import NavBar from '@/components/shared/NavBar';
 import { useAuth } from '@/contexts/AuthContext';
 import { ArrowUp, Building, CreditCard, DollarSign } from 'lucide-react';
 import AnimatedButton from '@/components/ui/AnimatedButton';
-import { apiClient } from '@/services/apiUtils';
+import { withdrawFunds } from '@/services/transactionService';
+import { WithdrawRequest } from '@/services/types/transactionTypes';
 
 const Withdraw = () => {
   const navigate = useNavigate();
@@ -50,8 +50,8 @@ const Withdraw = () => {
     const reference = 'WD_' + Date.now().toString();
     
     try {
-      // This would be replaced with the actual endpoint when available
-      const response = await apiClient.post('/api/v1/user/withdraw', {
+      // Create the withdraw request data
+      const withdrawData: WithdrawRequest = {
         account_bank: bankCode,
         account_number: accountNumber,
         amount: Number(amount),
@@ -59,9 +59,13 @@ const Withdraw = () => {
         currency: "NGN",
         reference: reference,
         debit_currency: "NGN"
-      });
+      };
+
+      // Call the withdraw function
+      const response = await withdrawFunds(withdrawData);
       
-      if (response.data.status === "success") {
+      // Check response status (fixed type issue)
+      if (response && response.status === "success") {
         setIsSuccess(true);
         toast({
           title: "Withdrawal Initiated",
@@ -74,7 +78,8 @@ const Withdraw = () => {
           navigate('/dashboard');
         }, 5000);
       } else {
-        throw new Error(response.data.message || "Withdrawal failed");
+        // Fixed type issue by adding null check
+        throw new Error(response && response.message ? response.message : "Withdrawal failed");
       }
     } catch (error) {
       console.error("Withdrawal error:", error);
@@ -186,7 +191,7 @@ const Withdraw = () => {
                   
                   <AnimatedButton 
                     type="submit" 
-                    variant="primary"
+                    variant="default"
                     className="w-full h-12" 
                     isLoading={isLoading}
                   >
@@ -203,7 +208,7 @@ const Withdraw = () => {
                     ₦{amount} has been initiated for withdrawal to your bank account.
                   </p>
                   <Button 
-                    variant="primary"
+                    variant="default"
                     className="mt-4" 
                     onClick={() => navigate('/dashboard')}
                   >
@@ -220,7 +225,7 @@ const Withdraw = () => {
                     We couldn't process your withdrawal at this time. Please try again later.
                   </p>
                   <Button 
-                    variant="primary"
+                    variant="default"
                     className="mt-4" 
                     onClick={() => setIsSuccess(null)}
                   >
